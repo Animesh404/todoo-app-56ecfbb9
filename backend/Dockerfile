@@ -2,7 +2,7 @@
 # Removed BuildKit mount directives for Railway compatibility
 # Original template: https://github.com/fastapi/full-stack-fastapi-template
 
-FROM python:3.10
+FROM python:3.14
 
 ENV PYTHONUNBUFFERED=1
 
