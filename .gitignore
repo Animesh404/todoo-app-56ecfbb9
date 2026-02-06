@@ -4,3 +4,9 @@ node_modules/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+# Fastable temporary files
+.fastable.md
+**/index.html.backup
+frontend/public/console-interceptor.js
+frontend/bun.lock
