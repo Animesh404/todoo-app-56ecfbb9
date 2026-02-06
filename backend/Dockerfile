@@ -1,3 +1,7 @@
+# Modified by Fastable for Railway deployment (2026-02-06)
+# Removed BuildKit mount directives for Railway compatibility
+# Original template: https://github.com/fastapi/full-stack-fastapi-template
+
 FROM python:3.10
 
 ENV PYTHONUNBUFFERED=1
@@ -22,10 +26,8 @@ ENV UV_LINK_MODE=copy
 
 # Install dependencies
 # Ref: https://docs.astral.sh/uv/guides/integration/docker/#intermediate-layers
-RUN --mount=type=cache,target=/root/.cache/uv \
-    --mount=type=bind,source=uv.lock,target=uv.lock \
-    --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
-    uv sync --frozen --no-install-project
+COPY ./uv.lock ./pyproject.toml /app/
+RUN uv sync --frozen --no-install-project
 
 ENV PYTHONPATH=/app
 
@@ -37,7 +39,6 @@ COPY ./app /app/app
 
 # Sync the project
 # Ref: https://docs.astral.sh/uv/guides/integration/docker/#intermediate-layers
-RUN --mount=type=cache,target=/root/.cache/uv \
-    uv sync
+RUN uv sync
 
-CMD ["fastapi", "run", "--workers", "4", "app/main.py"]
+CMD ["bash", "-c", "bash scripts/prestart.sh && fastapi run --workers 4 app/main.py"]
